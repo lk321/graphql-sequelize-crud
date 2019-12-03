@@ -87,7 +87,7 @@ export function convertFieldsToGlobalId(
         if (attr.references) {
             // console.log(`Replacing ${getTableName(Model)}'s field ${k} with globalIdField.`);
             const modelName = attr.references.model;
-            fields[key] = attr.allowNull ? globalNullableIdInputField(modelName) : globalIdInputField(modelName);
+            fields[key] = attr.allowNull || typeof attr.defaultValue !== 'undefined' ? globalNullableIdInputField(modelName) : globalIdInputField(modelName);
         } else if (attr.primaryKey) {
             // Make primaryKey optional (allowNull=True)
             fields[key] = globalNullableIdInputField(getTableName(model));
@@ -110,6 +110,7 @@ export interface RawAttributes {
 export interface RawAttribute {
     primaryKey: string;
     allowNull: boolean;
+    defaultValue: any;
     references: {
         model: string;
     };
